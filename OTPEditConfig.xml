@@ -1,0 +1,14 @@
+<OtpEditConfig>
+    <AttributeStore>userparameters</AttributeStore>
+    <ODTDefinitionString>#@</ODTDefinitionString>
+    <ODTSeperator>,</ODTSeperator>
+    <OTPDefaultDeviceName>Provisioned</OTPDefaultDeviceName>
+    <LDAPServer>localhost</LDAPServer>
+    <SMTPServer Type="String">smtp.gmail.com</SMTPServer>
+    <SMTPUser Type="String"></SMTPUser>
+    <SMTPPassword Type="Password"></SMTPPassword>
+    <SMTPPort Type="String">578</SMTPPort>
+    <SMTPMailFrom Type="String">info@GreatAwsomeCompany.jupiter</SMTPMailFrom>
+    <SMTPUseSSL Type="Switch">true</SMTPUseSSL>
+    <SMTPSubject Type="String">Two factor QRCode Mail</SMTPSubject>
+</OtpEditConfig>
