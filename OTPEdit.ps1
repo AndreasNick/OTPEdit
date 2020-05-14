@@ -172,7 +172,8 @@ $xaml = @'
    
 </Window>
 '@
-
+
+
 function Convert-XAMLtoWindow
 {
   param
@@ -256,11 +257,11 @@ function Update-Users{
           
       $mainWindow.Dispatcher.Invoke([System.Action] { $mainWindow.ListViewOTPUsers.ItemsSource = $Userlist  })
     }
-   
+
     Write-Verbose "Finished update userlist" -Verbose
 
     #Close waiting Window
-   
+
     $win1.Dispatcher.Invoke{$result = $win1.close()}.Wait()
 
   } -Verbose 
@@ -281,7 +282,8 @@ $window = Convert-XAMLtoWindow -XAML $xaml
 
 $window.ButtonRefresh.add_Click{
   Update-Users -AllUserTab ($window.TabControl.SelectedIndex -eq 1)
-}
+}
+
 $window.ListViewOTPUsers.add_SelectionChanged{
 
 
@@ -299,7 +301,8 @@ $window.ListViewOTPUsers.add_SelectionChanged{
 
     $window.ListViewDevices.ItemsSource = $DeviceList
   }
-}
+}
+
 $window.ListViewAllUsers.add_SelectionChanged{
 
   if($window.ListViewAllUsers.ItemsSource -ne $null){
@@ -315,20 +318,21 @@ $window.ListViewAllUsers.add_SelectionChanged{
     $window.ListViewDevices.ItemsSource = $DeviceList
   }
 
-}
+}
+
 $window.RemoveDevice.add_Click{
- 
+
   $User = $null
   $DeviceString = $null
   if($window.TabControl.SelectedIndex -eq 0){
     $User = $($window.ListViewOTPUsers.SelectedItem.SamAccountName)
     $DeviceString = $($window.ListViewOTPUsers.SelectedItem.$AttributeStore)
-     
+
   } else {
     $User = $($window.ListViewAllUsers.SelectedItem.SamAccountName)
     $DeviceString = $($window.ListViewAllUsers.SelectedItem.$AttributeStore)
   }
- 
+
   $DeviceList = @()
 
   if(($DeviceString.Length -gt 0) -and ($DeviceString.Substring($DeviceString.Length-1, 1) -eq $ODTSeperator)){
@@ -360,16 +364,14 @@ $window.RemoveDevice.add_Click{
     }
   } 
  
-}
+}
+
 $window.RemoveAllDevices.add_Click{
   $SamAccountName = $null
   if($window.TabControl.SelectedIndex -eq 0){
     $SamAccountName = $window.ListViewOTPUsers.SelectedItem.SamAccountName
-       
-     
   } else {
     $SamAccountName = $window.ListViewAllUsers.SelectedItem.SamAccountName
-       
   }
   
   $Command = "Set-ADUser -Identity $SamAccountName -Clear '"+ $AttributeStore +"'"
@@ -389,8 +391,8 @@ $window.RemoveAllDevices.add_Click{
       Out-Message -Message $($_ | Out-String) -Type Information -ParentWindow $window
     }
   } 
-}
-
+}
+
 $window.TabControl.add_SelectionChanged{
   
   param
@@ -409,7 +411,7 @@ $window.TabControl.add_SelectionChanged{
       Update-Users -AllUserTab $false
     }
   }
-}
+}
 
 $window.ListViewDevices.add_MouseRightButtonDown{
 
@@ -431,7 +433,9 @@ $window.ListViewDevices.add_MouseRightButtonDown{
     $window.RemoveAllDevices.IsEnabled = $true
   }
     
-}
+}
+
+
 $window.ListViewDevices.add_SelectionChanged{
   if($window.ListViewDevices.Items.Count -eq 0){
     $window.RemoveAllDevices.IsEnabled = $false
@@ -447,7 +451,8 @@ $window.ListViewDevices.add_SelectionChanged{
     }
     $window.RemoveAllDevices.IsEnabled = $true
   }
-}
+}
+
 #Report Funktion
 $window.ButtonExportCSV.add_Click{
 
@@ -476,7 +481,8 @@ $window.ButtonExportCSV.add_Click{
     }
     $Userlist | Select-Object -Property surname,givenname,SamAccountName,DeviceCount | Export-Csv -Path $($dlg.FileName) -Encoding UTF8
   }
-}
+}
+
 $window.OtpWindow.add_Loaded{
 
   $Global:ConfigXml = New-Object xml
@@ -495,7 +501,8 @@ $window.OtpWindow.add_Loaded{
   }
   
   Set-GlobalSettings
-}
+}
+
 $window.TextBoxADFilter.add_KeyDown{
   # remove param() block if access to event information is not required
   param
@@ -514,7 +521,8 @@ $window.TextBoxADFilter.add_KeyDown{
   
     Update-Users -AllUserTab ($window.TabControl.SelectedIndex -eq 1)
   }
-}
+}
+
 $window.ButtonConfig.add_Click{
 
   #Change Config
@@ -528,18 +536,21 @@ $window.ButtonConfig.add_Click{
   if($server -ne  $Global:Configxml.OtpEditConfig.LDAPServer){
     Update-Users -AllUserTab ($window.TabControl.SelectedIndex -eq 1)
   }
-}
+}
+
 $window.ButtonTwitter.add_Click{
   New-PSDrive -Name HKCR -PSProvider registry -Root Hkey_Classes_Root | Out-Null
   $browserPath = ((Get-ItemProperty 'HKCR:\http\shell\open\command').'(default)').Split('"')[1]
   & $browserPath "https://twitter.com/nickinformation"
-}
+}
+
 $window.ButtonAbout.add_Click{
   New-MessageBox  -Symbol $Global:Shell32Symbols.Star -title "About" -Message $("Andreas Nick - 2020`n") -Hyperlinks `
   @("https://software-Virtualisierung.de", "https://andreasnick.com","https://nick-it.de")  -linksAltText `
   @("My German blog Softwarevirtualisierung`n", "My English blog`n","My Company`n") -EndMessage `
   "`nThanks to Thorsten for the idea and the testing`n Contact: info@nick-it.de" -DisableCancle $true -ParentWindow $window
-}
+}
+
 
 #
 #
@@ -599,7 +610,7 @@ $window.AddDevice.add_Click{
     if($window.TabControl.SelectedIndex -eq 0){
       $User = $($window.ListViewOTPUsers.SelectedItem.SamAccountName)
       $DeviceString = $($window.ListViewOTPUsers.SelectedItem.$AttributeStore)
-     
+
     } else {
       $User = $($window.ListViewAllUsers.SelectedItem.SamAccountName)
       $DeviceString = $($window.ListViewAllUsers.SelectedItem.$AttributeStore)
@@ -627,7 +638,7 @@ $window.AddDevice.add_Click{
           #
           # Send QRCode
           #
-           
+
           $res = Out-Message -Message $("Send E-Mail to User $User (" + $Result.EMail +")") -Type Information -ParentWindow $window -DisableCancel $false
           
           if($res -eq "OK"){
