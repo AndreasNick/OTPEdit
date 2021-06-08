@@ -344,7 +344,7 @@ $window.RemoveDevice.add_Click{
   
     $DeviceString = $DeviceString -Replace  $( $window.ListViewDevices.SelectedItem + $ODTSeperator) ,""
    
-    $Command = 'Set-ADUser -Identity ' + $User + ' -Replace @{'+ $AttributeStore +'="'+$DeviceString+'"}'
+    $Command = 'Set-ADUser -Identity ' + $User + ' -Replace @{'''+ $AttributeStore +'''="'+$DeviceString+'"}'
     
   } else { #Clear
     $Command = "Set-ADUser -Identity $user -Clear '"+ $AttributeStore +"'"
@@ -624,7 +624,7 @@ $window.AddDevice.add_Click{
         OtpEditConfig.ODTDefinitionString + $DeviceString)
       }
     
-      $Command = 'Set-ADUser -Identity ' + $User + ' -Replace @{'+ $AttributeStore +'="'+$DeviceString+$NewDevString+'"}'
+      $Command = 'Set-ADUser -Identity ' + $User + ' -Replace @{'''+ $AttributeStore +'''="'+$DeviceString+$NewDevString+'"}'
   
       $res = Out-Message -Message $("SamAccountName = $User `nExecute command : " + $Command) -Type Information -ParentWindow $window -DisableCancel $false
   
